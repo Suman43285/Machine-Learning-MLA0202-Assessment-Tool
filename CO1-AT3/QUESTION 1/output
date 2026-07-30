@@ -1,0 +1,7 @@
+Prior Probability of Malignant: 0.37142857142857144
+Prior Probability of Benign: 0.6285714285714286
+
+Posterior Probabilities
+Malignant: 2.42625722558841e-09
+Benign: 0.9999999975737435
+Predicted Class: Benign
