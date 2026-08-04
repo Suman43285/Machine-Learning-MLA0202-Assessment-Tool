@@ -1,1 +1,20 @@
-
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+data = {
+    "Area": [600, 800, 1000, 1200, 1500],
+    "Rooms": [1, 2, 2, 3, 4],
+    "Location": [0, 0, 1, 1, 2],   # 0=Urban, 1=Suburban, 2=Rural
+    "Rent": [12000, 18000, 22000, 28000, 35000]
+}
+df = pd.DataFrame(data)
+X = df[["Area", "Rooms", "Location"]]
+y = df["Rent"]
+model = LinearRegression()
+model.fit(X, y)
+new_data = pd.DataFrame({
+    "Area": [1100],
+    "Rooms": [3],
+    "Location": [1]
+})
+rent = model.predict(new_data)
+print("Predicted Rent: ₹{:.0f}".format(rent[0]))
