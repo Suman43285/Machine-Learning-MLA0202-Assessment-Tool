@@ -1,0 +1,28 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+df = pd.read_csv("email_data.csv")
+X = df[["SpamWords", "NormalWords", "Links"]]
+y = df["Spam"]
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42
+)
+model = LogisticRegression()
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+print("Original Accuracy:", accuracy_score(y_test, y_pred))
+print("Original Confusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
+prob = model.predict_proba(X_test)[:, 1]
+y_threshold = (prob >= 0.3).astype(int)
+print("\nAfter Threshold Adjustment:")
+print(confusion_matrix(y_test, y_threshold))
+balanced_model = LogisticRegression(class_weight="balanced")
+balanced_model.fit(X_train, y_train)
+y_balanced = balanced_model.predict(X_test)
+print("\nAfter Balanced Training:")
+print("Accuracy:", accuracy_score(y_test, y_balanced))
+print(confusion_matrix(y_test, y_balanced))
