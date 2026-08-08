@@ -1,0 +1,24 @@
+import pandas as pd
+data = pd.read_csv("naive_bayes_email_dataset.csv")
+total_spam = data["spam_count"].sum()
+total_ham = data["ham_count"].sum()
+print("Total Spam Count:", total_spam)
+print("Total Ham Count:", total_ham)
+data["spam_probability"] = data["spam_count"] / total_spam
+data["ham_probability"] = data["ham_count"] / total_ham
+alpha = 1
+vocabulary = len(data)
+data["spam_smooth"] = (
+    (data["spam_count"] + alpha) /
+    (total_spam + alpha * vocabulary)
+)
+data["ham_smooth"] = (
+    (data["ham_count"] + alpha) /
+    (total_ham + alpha * vocabulary)
+)
+print("\nZero probabilities before smoothing:")
+print("Spam:", (data["spam_probability"] == 0).sum())
+print("Ham:", (data["ham_probability"] == 0).sum())
+print("\nZero probabilities after smoothing:")
+print("Spam:", (data["spam_smooth"] == 0).sum())
+print("Ham:", (data["ham_smooth"] == 0).sum())
