@@ -1,0 +1,25 @@
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA, FactorAnalysis, FastICA
+from sklearn.mixture import GaussianMixture
+data = pd.read_csv("wine_samples.csv")
+X = data[["Alcohol", "MalicAcid", "Ash", "Alcalinity",
+          "Magnesium", "Phenols"]]
+X = StandardScaler().fit_transform(X)
+pca = PCA(n_components=2)
+X_pca = pca.fit_transform(X)
+fa = FactorAnalysis(n_components=2, random_state=42)
+X_fa = fa.fit_transform(X)
+ica = FastICA(n_components=2, random_state=42)
+X_ica = ica.fit_transform(X)
+gmm = GaussianMixture(n_components=3, random_state=42)
+clusters = gmm.fit_predict(X_pca)
+print("PCA Results:")
+print(X_pca)
+print("\nFactor Analysis Results:")
+print(X_fa)
+print("\nICA Results:")
+print(X_ica)
+print("\nGMM Cluster Labels:")
+print(clusters)
+print("Sumanth Kumar/192425222")
