@@ -1,0 +1,36 @@
+import sklearn_crfsuite
+X_train = [
+    [{"word": "John"}, {"word": "ordered"}, {"word": "Laptop"}, {"word": "ID123"}],
+    [{"word": "Alice"}, {"word": "bought"}, {"word": "Phone"}, {"word": "ID456"}],
+    [{"word": "Robert"}, {"word": "ordered"}, {"word": "Tablet"}, {"word": "ID789"}]
+]
+y_train = [
+    ["CUSTOMER", "O", "PRODUCT", "ORDER_ID"],
+    ["CUSTOMER", "O", "PRODUCT", "ORDER_ID"],
+    ["CUSTOMER", "O", "PRODUCT", "ORDER_ID"]
+]
+def features(sentence):
+    return [{
+        "word": w["word"],
+        "lower": w["word"].lower(),
+        "first": w["word"][0],
+        "last": w["word"][-1],
+        "length": len(w["word"])
+    } for w in sentence]
+X = [features(s) for s in X_train]
+crf = sklearn_crfsuite.CRF(
+    algorithm="lbfgs",
+    max_iterations=100
+)
+crf.fit(X, y_train)
+test = [
+    {"word": "David"},
+    {"word": "ordered"},
+    {"word": "Laptop"},
+    {"word": "ID321"}
+]
+prediction = crf.predict([features(test)])[0]
+print("Predicted Labels:")
+for word, label in zip(test, prediction):
+    print(word["word"], "->", label)
+print("Sumanth Kumar/192425222")
