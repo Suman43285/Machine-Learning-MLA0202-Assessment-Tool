@@ -1,0 +1,36 @@
+states = ["Sunny", "Cloudy", "Rainy"]
+observations = ["Sunny", "Cloudy", "Rainy"]
+transition = {
+    "Sunny":  {"Sunny": 0.6, "Cloudy": 0.3, "Rainy": 0.1},
+    "Cloudy": {"Sunny": 0.2, "Cloudy": 0.5, "Rainy": 0.3},
+    "Rainy":  {"Sunny": 0.1, "Cloudy": 0.4, "Rainy": 0.5}
+}
+emission = {
+    "Sunny":  {"Sunny": 0.8, "Cloudy": 0.15, "Rainy": 0.05},
+    "Cloudy": {"Sunny": 0.2, "Cloudy": 0.6, "Rainy": 0.2},
+    "Rainy":  {"Sunny": 0.05, "Cloudy": 0.25, "Rainy": 0.7}
+}
+initial = {"Sunny": 0.5, "Cloudy": 0.3, "Rainy": 0.2}
+obs = ["Sunny", "Cloudy", "Rainy", "Rainy", "Cloudy"]
+V = [{}]
+path = {}
+for state in states:
+    V[0][state] = initial[state] * emission[state][obs[0]]
+    path[state] = [state]
+for t in range(1, len(obs)):
+    V.append({})
+    new_path = {}
+    for state in states:
+        prob, prev_state = max(
+            (V[t-1][p] * transition[p][state] *
+             emission[state][obs[t]], p)
+            for p in states
+        )
+        V[t][state] = prob
+        new_path[state] = path[prev_state] + [state]
+    path = new_path
+prob, final_state = max((V[-1][s], s) for s in states)
+print("Observed sequence:", obs)
+print("Predicted hidden states:", path[final_state])
+print("Probability:", prob)
+print("Sumanth Kumar/192425222")
