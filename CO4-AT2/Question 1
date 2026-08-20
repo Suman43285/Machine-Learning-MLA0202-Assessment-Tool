@@ -1,0 +1,40 @@
+from pgmpy.models import DiscreteBayesianNetwork
+from pgmpy.factors.discrete import TabularCPD
+from pgmpy.inference import VariableElimination
+model = DiscreteBayesianNetwork([
+    ("Amount", "Fraud"),
+    ("Location", "Fraud"),
+    ("Device", "Fraud"),
+    ("History", "Fraud")
+])
+amount = TabularCPD("Amount", 2, [[0.7], [0.3]])
+location = TabularCPD("Location", 2, [[0.8], [0.2]])
+device = TabularCPD("Device", 2, [[0.7], [0.3]])
+history = TabularCPD("History", 2, [[0.9], [0.1]])
+fraud = TabularCPD(
+    "Fraud", 2,
+    [[0.9, 0.7, 0.6, 0.2, 0.7, 0.4, 0.3, 0.1,
+      0.8, 0.5, 0.3, 0.1, 0.5, 0.3, 0.1, 0.05],
+     [0.1, 0.3, 0.4, 0.8, 0.3, 0.6, 0.7, 0.9,
+      0.2, 0.5, 0.7, 0.9, 0.5, 0.7, 0.9, 0.95]],
+    evidence=["Amount", "Location", "Device", "History"],
+    evidence_card=[2, 2, 2, 2]
+)
+model.add_cpds(amount, location, device, history, fraud)
+infer = VariableElimination(model)
+result = infer.query(
+    ["Fraud"],
+    evidence={
+        "Amount": 1,
+        "Location": 1,
+        "Device": 1,
+        "History": 1
+    }
+)
+print(result)
+print("Fraud Probability:", result.values[1])
+if result.values[1] > 0.5:
+    print("Prediction: Fraudulent")
+else:
+    print("Prediction: Genuine")
+print("sumanth kumar/192425222")
