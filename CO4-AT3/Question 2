@@ -1,0 +1,24 @@
+import pandas as pd
+import networkx as nx
+import matplotlib.pyplot as plt
+data = pd.read_csv("driving_activity_data.csv")
+print(data.head())
+hmm = nx.DiGraph([
+    ("Driving", "Turning"),
+    ("Turning", "Braking"),
+    ("Braking", "Stopping")
+])
+crf = nx.Graph([
+    ("Driving", "Turning"),
+    ("Turning", "Braking"),
+    ("Braking", "Stopping")
+])
+plt.figure(figsize=(10, 4))
+plt.subplot(1, 2, 1)
+nx.draw(hmm, with_labels=True)
+plt.title("Hidden Markov Model (HMM)")
+plt.subplot(1, 2, 2)
+nx.draw(crf, with_labels=True)
+plt.title("Conditional Random Field (CRF)")
+plt.show()
+print("sumanth kumar/192425222")
