@@ -1,0 +1,24 @@
+import pandas as pd
+import networkx as nx
+import matplotlib.pyplot as plt
+data = pd.read_csv("disease_diagnosis_data.csv")
+print(data.head())
+bn = nx.DiGraph([
+    ("History", "Disease"),
+    ("Fever", "Disease"),
+    ("Cough", "Disease")
+])
+mrf = nx.Graph([
+    ("History", "Disease"),
+    ("Fever", "Disease"),
+    ("Cough", "Disease")
+])
+plt.figure(figsize=(10, 4))
+plt.subplot(1, 2, 1)
+nx.draw(bn, with_labels=True)
+plt.title("Bayesian Network")
+plt.subplot(1, 2, 2)
+nx.draw(mrf, with_labels=True)
+plt.title("Markov Random Field")
+plt.show()
+print("sumanth kumar/192425222")
