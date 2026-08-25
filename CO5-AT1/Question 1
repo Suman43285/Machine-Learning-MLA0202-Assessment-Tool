@@ -1,0 +1,58 @@
+import numpy as np
+grid = [
+    [0, 0, 0],
+    [0, 1, 0],
+    [0, 0, 0]
+]
+goal = (2, 2)
+actions = {
+    "Up": (-1, 0),
+    "Down": (1, 0),
+    "Left": (0, -1),
+    "Right": (0, 1)
+}
+V = np.zeros((3, 3))
+gamma = 0.9
+def move(state, action):
+    r, c = state
+    dr, dc = actions[action]
+    nr, nc = r + dr, c + dc
+    if 0 <= nr < 3 and 0 <= nc < 3 and grid[nr][nc] == 0:
+        return (nr, nc)
+    return state
+for _ in range(50):
+    new_V = V.copy()
+    for r in range(3):
+        for c in range(3):
+            if grid[r][c] == 1:
+                continue
+            if (r, c) == goal:
+                new_V[r, c] = 100
+                continue
+            values = []
+            for action in actions:
+                ns = move((r, c), action)
+                if ns == goal:
+                    reward = 100
+                elif ns == (r, c):
+                    reward = -10
+                else:
+                    reward = -1
+                values.append(reward + gamma * V[ns])
+            new_V[r, c] = max(values)
+    V = new_V
+for r in range(3):
+    for c in range(3):
+        if grid[r][c] == 1:
+            print("#", end=" ")
+            continue
+        if (r, c) == goal:
+            print("G", end=" ")
+            continue
+        best = max(
+            actions,
+            key=lambda a: V[move((r, c), a)]
+        )
+        print(best[0], end=" ")
+    print()
+print("Sumanth Kumar/192425222")
