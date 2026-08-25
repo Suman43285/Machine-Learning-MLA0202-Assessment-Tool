@@ -1,0 +1,30 @@
+import random
+ads = 5
+users = 10000
+epsilon = 0.1
+probability = [0.05, 0.10, 0.08, 0.15, 0.12]
+count = [0] * ads
+reward = [0] * ads
+for _ in range(users):
+    if random.random() < epsilon:
+        ad = random.randint(0, ads - 1)
+    else:
+        average = [
+            reward[i] / count[i] if count[i] > 0 else 0
+            for i in range(ads)
+        ]
+        ad = average.index(max(average))
+    click = 1 if random.random() < probability[ad] else 0
+    count[ad] += 1
+    reward[ad] += click
+print("Advertisement Results")
+for i in range(ads):
+    ctr = reward[i] / count[i]
+    print("Ad", i + 1,
+          "CTR =", round(ctr, 3),
+          "Times =", count[i])
+best = max(range(ads),
+           key=lambda i: reward[i] / count[i])
+print("\nBest Advertisement: Ad", best + 1)
+print("Total Clicks:", sum(reward))
+print("Sumanth Kumar/192425222")
