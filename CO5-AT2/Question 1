@@ -1,0 +1,16 @@
+import random
+N = 10000
+on_time_count = 0
+for i in range(N):
+    traffic = random.random()
+    weather = random.random()
+    if traffic < 0.7 and weather < 0.8:
+        on_time_count += 1
+probability = on_time_count / N
+print("Total Simulations:", N)
+print("On-Time Deliveries:", on_time_count)
+print("Estimated Probability of On-Time Delivery:",
+      round(probability, 4))
+print("Estimated Percentage:",
+      round(probability * 100, 2), "%")
+print("Sumanth Kumar/192425222")
