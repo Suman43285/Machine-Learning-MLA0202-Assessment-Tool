@@ -1,0 +1,23 @@
+import random
+K = 5
+N = 1000
+epsilon = 0.1
+reward_estimates = [0] * K
+counts = [0] * K
+actual_rewards = [0.2, 0.5, 0.7, 0.4, 0.6]
+for i in range(N):
+    if random.random() < epsilon:
+        movie = random.randint(0, K - 1)
+    else:
+        movie = reward_estimates.index(max(reward_estimates))
+    reward = 1 if random.random() < actual_rewards[movie] else 0
+    counts[movie] += 1
+    reward_estimates[movie] += (
+        reward - reward_estimates[movie]
+    ) / counts[movie]
+best_movie = reward_estimates.index(max(reward_estimates))
+print("Reward Estimates:", reward_estimates)
+print("Movie Selection Counts:", counts)
+print("Best Movie: Movie", best_movie + 1)
+print("Highest Expected Reward:", round(reward_estimates[best_movie], 3))
+print("Sumanth Kumar/192425222")
