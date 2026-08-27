@@ -1,0 +1,18 @@
+import random
+alpha = 0.1
+gamma = 0.9
+episodes = 10
+V = {0: 0, 1: 0, 2: 0, 3: 0}
+for episode in range(episodes):
+    state = 0
+    while state != 3:  
+        next_state = state + 1
+        reward = random.choice([0, 1])
+        V[state] = V[state] + alpha * (
+            reward + gamma * V[next_state] - V[state]
+        )
+        state = next_state
+print("State Value Estimates:")
+for state, value in V.items():
+    print("State", state, ":", round(value, 3))
+print("Sumanth Kumar/192425222")
