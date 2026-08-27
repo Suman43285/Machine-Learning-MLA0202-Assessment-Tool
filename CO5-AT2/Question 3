@@ -1,0 +1,50 @@
+grid = [
+    [0, 0, 0],
+    [0, -1, 0],
+    [0, 0, 1]
+]
+gamma = 0.9
+V = [[0]*3 for _ in range(3)]
+actions = {
+    "U": (-1, 0), "D": (1, 0),
+    "L": (0, -1), "R": (0, 1)
+}
+for _ in range(100):
+    newV = [row[:] for row in V]
+    for r in range(3):
+        for c in range(3):
+            if grid[r][c] == -1 or grid[r][c] == 1:
+                continue
+            values = []
+            for dr, dc in actions.values():
+                nr, nc = r + dr, c + dc
+                if (0 <= nr < 3 and 0 <= nc < 3
+                        and grid[nr][nc] != -1):
+                    reward = 10 if grid[nr][nc] == 1 else -1
+                    values.append(reward + gamma * V[nr][nc])
+            if values:
+                newV[r][c] = max(values)
+    V = newV
+print("Value Function:")
+for row in V:
+    print([round(x, 2) for x in row])
+print("\nOptimal Policy:")
+for r in range(3):
+    policy = []
+    for c in range(3):
+        if grid[r][c] == -1:
+            policy.append("X")
+        elif grid[r][c] == 1:
+            policy.append("G")
+        else:
+            best = max(
+                actions,
+                key=lambda a: V[
+                    max(0, min(2, r + actions[a][0]))
+                ][
+                    max(0, min(2, c + actions[a][1]))
+                ]
+            )
+            policy.append(best)
+    print(policy)
+print("Sumanth Kumar/192425222")
